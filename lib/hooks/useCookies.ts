@@ -31,5 +31,5 @@ class Cookies {
     remove = (name: string, options?: any) => this.cookies.remove(name, this.getOpts(options))
 }
 
-export const useCookie = (cookie?: string, host?: string) => new Cookies(cookie, host);
-export const fromRawCookie = (cookie: string) => new Cookies(cookie);
+export const useCookies = (cookie?: string, host?: string) => new Cookies(cookie, host);
+export const fromRawCookies = (cookie: string) => new Cookies(cookie);

@@ -10,7 +10,8 @@
     "paths": {
       "Components/*": ["comps/*"],
       "Lib/*": ["lib/*"],
-      "styles/*": ["styles/*"]
+      "styles/*": ["styles/*"],
+      "gql/*": ["lib/apollo/schemas/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

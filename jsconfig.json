@@ -4,7 +4,8 @@
     "paths": {
       "Components/*": ["comps/*"],
       "Lib/*": ["lib/*"],
-      "styles/*": ["styles/*"]
+      "styles/*": ["styles/*"],
+      "gql/*": ["lib/apollo/schemas/*"]
     }
   }
 }

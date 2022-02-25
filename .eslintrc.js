@@ -21,6 +21,7 @@ module.exports = {
                     ['Components', path.join(__dirname, 'comps')],
                     ['Lib', path.join(__dirname, 'lib')],
                     ['styles', path.join(__dirname, 'styles')],
+                    ['gql', path.join(__dirname, 'lib/apollo/schemas')],
                 ],
                 extensions,
             },
