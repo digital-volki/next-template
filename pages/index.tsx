@@ -1,4 +1,4 @@
-import {NextPage} from "next";
+import {GetServerSideProps, NextPage} from "next";
 import {useQuery} from "@apollo/client";
 
 import {useDispatch, useSelector} from "Lib/hooks/useState";
@@ -43,6 +43,15 @@ const Home: NextPage = () => {
             {/*{cookie.get('id')}*/}
         </div>
     )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async ctx => {
+
+    console.log(ctx)
+    return {
+        props: {}
+    }
 }
 
 export default Home

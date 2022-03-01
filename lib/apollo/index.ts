@@ -22,7 +22,6 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 // @ts-ignore
 let apolloClient;
-let tokenGlobal: string | null = null;
 
 
 const errorTemplate = {
@@ -41,7 +40,7 @@ const errorLink = onError(({forward, operation, graphQLErrors, networkError}) =>
                 cache: new InMemoryCache()
             })
             // eslint-disable-next-line no-debugger
-            debugger
+            // debugger
             client.mutate({
                 mutation: REFRESH,
                 variables: {
@@ -50,14 +49,14 @@ const errorLink = onError(({forward, operation, graphQLErrors, networkError}) =>
             }).then(({data}) => {
 
                 localStorage.setItem('refresh_token', data.auth_refresh.refresh_token)
-                tokenGlobal = data.auth_refresh.access_token
-                cookie.set(baseEnv.another.token, tokenGlobal)
+                const token = data.auth_refresh.access_token
+                cookie.set(baseEnv.another.token, token)
                 const oldHeaders = operation.getContext().headers;
 
                 operation.setContext({
                     headers: {
                         ...oldHeaders,
-                        authorization: `Bearer ${tokenGlobal}`,
+                        authorization: `Bearer ${token}`,
                     }
                 });
                 return forward(operation)
@@ -85,7 +84,12 @@ const linkCascade = () => ApolloLink.split(
 
 
 export const createApolloClient = (token?: string | null) => new ApolloClient({
-    link: from([new RetryLink(), errorLink, authLink(tokenGlobal || token), linkCascade()]),
+    link: from([
+        authLink(token),
+        new RetryLink(),
+        errorLink,
+        linkCascade()
+    ]),
     cache: new InMemoryCache({
         typePolicies: {
             Query: {

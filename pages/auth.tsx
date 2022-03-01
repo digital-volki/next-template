@@ -42,7 +42,7 @@ const Home: NextPage = () => {
                 className={'btn btn-success'}
                 onClick={() => refresh({
                     variables: {
-                        refresh: localStorage.getItem('refresh_token')
+                        refresh: localStorage.getItem('directus_refresh_token')
                     }
                 })}
             >
