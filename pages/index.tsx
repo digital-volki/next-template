@@ -1,31 +1,45 @@
 import {NextPage} from "next";
 import {useQuery} from "@apollo/client";
 
-import {DisCom} from "Components/DisCom";
 import {useDispatch, useSelector} from "Lib/hooks/useState";
 import {uiState} from "Lib/store/ui";
-import BASE_IO from 'gql/checking/baseIo.graphql'
+import BASE_IO from 'gql/system/baseIo.graphql'
 
 
 const Home: NextPage = () => {
 
     const poi = useSelector('ui.defaultValue')
     const dp = useDispatch()
-    // const cookie = useCookies();
 
-    const {loading, data} = useQuery(BASE_IO);
+    const {data, loading, refetch, error} = useQuery(BASE_IO)
+    // useQuery(BASE_SECOND)
 
     return (
         <div className={'bg-one_cc'}>
-            {loading || JSON.stringify(data)}
-            {poi}
-            <button className='btn' onClick={() => dp(uiState.actions.setDefaultValue('s'))}>
-                ss
-            </button>
-            <DisCom />
-            <div className={'btn-one_cc btn'}>
-                xs ss
+            {JSON.stringify(error)}
+            <div className='bg-success'>
+                {loading || JSON.stringify(data)}
             </div>
+            {poi}
+            <button className='btn' onClick={() => dp(uiState.actions.setAccessToken('dev_key_undef_not_exist'))}>
+                add
+            </button>
+            <button className='btn' onClick={() => dp(uiState.actions.removeAccessToken(null))}>
+                remove
+            </button>
+            <button className='btn' onClick={() => refetch()}>
+                refetch
+            </button>
+            {/*<button className='btn' onClick={() => remove()}>*/}
+            {/*    remove*/}
+            {/*</button>*/}
+            {/*<button className='btn' onClick={() => add()}>*/}
+            {/*    add*/}
+            {/*</button>*/}
+            {/*<DisCom />*/}
+            {/*<div className={'btn-one_cc btn'}>*/}
+            {/*    xs ss*/}
+            {/*</div>*/}
             {/*{cookie.get('id')}*/}
         </div>
     )

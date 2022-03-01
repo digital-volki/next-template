@@ -32,4 +32,4 @@ class Cookies {
 }
 
 export const useCookies = (cookie?: string, host?: string) => new Cookies(cookie, host);
-export const fromRawCookies = (cookie: string) => new Cookies(cookie);
+export const fromRawCookies = (cookie?: string) => new Cookies(cookie);

@@ -8,17 +8,33 @@ const backendUrls = {
     assets: `${url}assets/`,
 }
 
+
 const colors = {
     one_cc: 'yellow'
 }
 
+
+const another = {
+    token: 'access_token',
+    schemaRegexp: () => /SYSTEM/gm
+}
+
+
+type PseudoMap<T> = { [k: string]: T }
+
+
 type IBaseEnv = {
-    [i: string]: {
-        [k: string]: string
+    backendUrls: PseudoMap<string>
+    colors: PseudoMap<string>
+    another: {
+        token: string
+        schemaRegexp: () => RegExp
     }
 }
+
 
 export const baseEnv: IBaseEnv = {
     backendUrls,
     colors,
+    another,
 }

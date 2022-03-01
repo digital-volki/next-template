@@ -1,15 +1,20 @@
 import {setContext} from "@apollo/client/link/context";
-import {ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client";
+import {ApolloClient, ApolloLink, createHttpLink, from, InMemoryCache} from "@apollo/client";
 import {isEqual, merge} from "lodash";
 import {useMemo} from "react";
+import {onError} from "@apollo/client/link/error";
+import fp from "lodash/fp";
+import {RetryLink} from "@apollo/client/link/retry";
 
 import {baseEnv} from "Lib/utils/consts";
+import {fromRawCookies} from "Lib/hooks/useCookies";
+import REFRESH from 'gql/system/refresh.graphql'
 
 
-export const authLink = (token?: string | null) => setContext((_, { headers }) => ({
+export const authLink = (token?: string | null) => setContext((_, {headers}) => ({
     headers: {
         ...headers,
-        authorization: token && `Bearer ${token}`,
+        authorization: token ? `Bearer ${token}` : null,
     },
 }));
 
@@ -17,11 +22,70 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 // @ts-ignore
 let apolloClient;
+let tokenGlobal: string | null = null;
+
+
+const errorTemplate = {
+    message: "Token expired."
+}
+
+
+const errorLink = onError(({forward, operation, graphQLErrors, networkError}) => {
+    if (fp.get('statusCode', networkError) === 401) {
+        const cookie = fromRawCookies()
+        cookie.remove(baseEnv.another.token)
+        const refresh = localStorage.getItem('refresh_token')
+        if (fp.findIndex(errorTemplate, graphQLErrors) && !fp.isEmpty(refresh)) {
+            const client = new ApolloClient({
+                uri: baseEnv.backendUrls.system,
+                cache: new InMemoryCache()
+            })
+            // eslint-disable-next-line no-debugger
+            debugger
+            client.mutate({
+                mutation: REFRESH,
+                variables: {
+                    refresh
+                }
+            }).then(({data}) => {
+
+                localStorage.setItem('refresh_token', data.auth_refresh.refresh_token)
+                tokenGlobal = data.auth_refresh.access_token
+                cookie.set(baseEnv.another.token, tokenGlobal)
+                const oldHeaders = operation.getContext().headers;
+
+                operation.setContext({
+                    headers: {
+                        ...oldHeaders,
+                        authorization: `Bearer ${tokenGlobal}`,
+                    }
+                });
+                return forward(operation)
+            })
+        }
+    }
+
+    if (graphQLErrors) {
+        graphQLErrors.forEach(({message, locations, path}) =>
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+            )
+        );
+    }
+    if (networkError)
+        console.log(`[Network error]: ${networkError}`);
+});
+
+
+const linkCascade = () => ApolloLink.split(
+    ({operationName}) => baseEnv.another.schemaRegexp().test(operationName),
+    createHttpLink({uri: baseEnv.backendUrls.system}),
+    createHttpLink({uri: baseEnv.backendUrls.gql}),
+)
+
 
 export const createApolloClient = (token?: string | null) => new ApolloClient({
-    link: (authLink(token)).concat(createHttpLink({
-        uri: baseEnv.backendUrls.gql,
-    })),
+    link: from([new RetryLink(), errorLink, authLink(tokenGlobal || token), linkCascade()]),
     cache: new InMemoryCache({
         typePolicies: {
             Query: {
@@ -34,19 +98,9 @@ export const createApolloClient = (token?: string | null) => new ApolloClient({
 });
 
 
-export const createSystemApolloClient = (token?: string | null) => new ApolloClient({
-    link: (authLink(token)).concat(createHttpLink({
-        uri: baseEnv.backendUrls.system,
-    })),
-    cache: new InMemoryCache(),
-});
-
-
-export const initializeApollo = (initialState = null, token: string | null = null, sys = false) => {
+export const initializeApollo = (initialState = null, token: string | null = null) => {
     // @ts-ignore
-    const _apolloClient = apolloClient ?? !sys
-        ? createApolloClient(token)
-        : createSystemApolloClient(token);
+    const _apolloClient = apolloClient ?? createApolloClient(token)
 
     // If your page has Next.js data fetching methods that use Apollo Client, the initial state
     // gets hydrated here

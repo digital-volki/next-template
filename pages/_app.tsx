@@ -6,6 +6,7 @@ import fp from "lodash/fp";
 import {GeneralCtx} from "Components/GeneralCtx";
 import {useApollo} from "Lib/apollo";
 import {useCookies} from "Lib/hooks/useCookies";
+import {baseEnv} from "Lib/utils/consts";
 
 
 interface IAppProps extends AppProps {
@@ -15,11 +16,17 @@ interface IAppProps extends AppProps {
 
 function RootApp({Component, pageProps, cookie, host}: IAppProps) {
     const cookies = useCookies(cookie, host)
-    const client = useApollo(pageProps, cookies.get('token'));
+    const client = useApollo(pageProps, cookies.get(baseEnv.another.token));
 
     return (
         <ApolloProvider client={client}>
-            <GeneralCtx>
+            <GeneralCtx
+                externalData={{
+                    ui: {
+                        accessToken: cookies.get(baseEnv.another.token) || null
+                    }
+                }}
+            >
                 <Component {...pageProps} />
             </GeneralCtx>
         </ApolloProvider>

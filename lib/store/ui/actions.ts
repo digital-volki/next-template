@@ -5,5 +5,6 @@ export const ui = createActionNamespace('ui');
 
 
 export const actions = {
-    setDefaultValue: ui('SET_DV'),
+    setAccessToken: ui('SET_ACCESS_TOKEN'),
+    removeAccessToken: ui('REMOVE_ACCESS_TOKEN'),
 };

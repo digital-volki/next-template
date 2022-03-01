@@ -1,4 +1,6 @@
 const {PHASE_DEVELOPMENT_SERVER} = require("next/constants");
+const withPWA = require('next-pwa')
+
 const composer = plugins => ({
     webpack(config, options) {
         return plugins.reduce((config, plugin) => {
@@ -43,9 +45,9 @@ const withGQL = (nextConfig = {}) => {
                 )
             }
 
-            const { dir } = options
+            const {dir} = options
 
-            // noinspection ES6ShorthandObjectProperty,JSValidateTypes
+            // noinspection ES6ShorthandObjectProperty,JSValidateTypes,JSCheckFunctionSignatures
             config.module.rules.push({
                 test: /\.(graphql|gql)$/,
                 include: [dir],
@@ -66,8 +68,14 @@ const withGQL = (nextConfig = {}) => {
     })
 }
 
+const pwaConfig = {
+    pwa: {
+        dest: 'public',
+    }
+}
 
-const composed = (phase) =>  {
+
+const composed = (phase) => {
     const plugins = [
         withGQL,
     ]
@@ -76,7 +84,7 @@ const composed = (phase) =>  {
     else {
         return composer([
             ...plugins,
-            // [withPWA, pc]
+            [withPWA, pwaConfig]
         ])
     }
 }
