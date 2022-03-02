@@ -13,8 +13,8 @@ const Home: NextPage = () => {
 
     const [auth] = useMutation(AUTH, {
         variables: {
-            email: 'master@volki.digital',
-            password: '863b397d-bc16-448e-ae7f-407e8ff7fe0d'
+            // email: 'master@volki.digital',
+            // password: '86xxx'
         },
         onCompleted: data => {
             dp(uiState.actions.setAccessToken(data.auth_login.access_token))

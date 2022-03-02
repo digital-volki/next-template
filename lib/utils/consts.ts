@@ -1,4 +1,3 @@
-
 const url = `https://${process.env.NEXT_PUBLIC_BASE_URL}/`
 
 const backendUrls = {

@@ -96,6 +96,10 @@ const nextConfig = (phase) => ({
     images: {
         domains: [],
     },
+    i18n: {
+        locales: ["ru-RU", "en-US"],
+        defaultLocale: "ru-RU",
+    },
     ...composed(phase)
 })
 

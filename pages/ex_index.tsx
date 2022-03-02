@@ -1,8 +1,10 @@
 import {GetServerSideProps, NextPage} from "next";
 import {useQuery} from "@apollo/client";
+import fp from "lodash/fp";
 
 import {useDispatch, useSelector} from "Lib/hooks/useState";
 import {uiState} from "Lib/store/ui";
+import {modalTypes} from "Components/ModalManager";
 import BASE_IO from 'gql/system/baseIo.graphql'
 
 
@@ -13,6 +15,7 @@ const Home: NextPage = () => {
 
     const {data, loading, refetch, error} = useQuery(BASE_IO)
     // useQuery(BASE_SECOND)
+
 
     return (
         <div className={'bg-one_cc'}>
@@ -30,6 +33,13 @@ const Home: NextPage = () => {
             <button className='btn' onClick={() => refetch()}>
                 refetch
             </button>
+            <button className={'btn'} onClick={() => dp(uiState.actions.addModal({
+                type: `${modalTypes.notNot}`
+            }))}>
+                modal
+            </button>
+
+            {JSON.stringify(fp.filter({io: 2}, [{io: 'ss'}, {io: 2}]))}
             {/*<button className='btn' onClick={() => remove()}>*/}
             {/*    remove*/}
             {/*</button>*/}

@@ -52,7 +52,7 @@ export const reducer = (state: any, action: IAction) => {
 
     const r: IReducer = fromStateGetter('reducer');
 
-    // console.log(state, action)
+    console.log(state, action)
     return {
         ...state,
         [`${namespace}`]: r[`${action.type}`](state[namespace], action.$payload),
