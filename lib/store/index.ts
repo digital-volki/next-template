@@ -1,6 +1,6 @@
-import fp from "lodash/fp";
+import fp from 'lodash/fp';
 
-import {uiState} from "Lib/store/ui";
+import {uiState} from 'Lib/store/ui';
 
 
 export type IAction = {
@@ -25,36 +25,36 @@ type IState = {
 }
 
 export const stateBundle: IState = {
-    uiState
+	uiState
 }
 
 
 export const fromStateGetter = (type: 'reducer' | 'initState' | 'namespace') => {
-    const typeGetter = fp.get(type)
-    switch (type) {
-        case "initState":
-            return fp.reduce((p, c) => ({...p, [`${c.namespace}`]: typeGetter(c)}), {}, stateBundle);
-        case "namespace":
-            return fp.reduce(
-                (p, c) => ({...p, [typeGetter(c)]: Object.keys(p).length}),
-                {},
-                stateBundle);
-        case "reducer":
-            return fp.reduce((p, c) => ({...typeGetter(p), ...typeGetter(c)}), {}, stateBundle);
-        default:
-            throw 'Unused type!'
-    }
+	const typeGetter = fp.get(type)
+	switch (type) {
+	case 'initState':
+		return fp.reduce((p, c) => ({...p, [`${c.namespace}`]: typeGetter(c)}), {}, stateBundle);
+	case 'namespace':
+		return fp.reduce(
+			(p, c) => ({...p, [typeGetter(c)]: Object.keys(p).length}),
+			{},
+			stateBundle);
+	case 'reducer':
+		return fp.reduce((p, c) => ({...p, ...typeGetter(c)}), {}, stateBundle);
+	default:
+		throw 'Unused type!'
+	}
 }
 
 
 export const reducer = (state: any, action: IAction) => {
-    const namespace = action.type.split('/')[0];
+	const namespace = action.type.split('/')[0];
 
-    const r: IReducer = fromStateGetter('reducer');
+	const r: IReducer = fromStateGetter('reducer');
 
-    console.log(state, action)
-    return {
-        ...state,
-        [`${namespace}`]: r[`${action.type}`](state[namespace], action.$payload),
-    };
+	console.log(state, action)
+	return {
+		...state,
+		[`${namespace}`]: r[`${action.type}`](state[namespace], action.$payload),
+	};
 };

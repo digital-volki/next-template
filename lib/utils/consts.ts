@@ -1,21 +1,21 @@
 const url = `https://${process.env.NEXT_PUBLIC_BASE_URL}/`
 
 const backendUrls = {
-    base: `${url}`,
-    gql: `${url}graphql/`,
-    system: `${url}graphql/system/`,
-    assets: `${url}assets/`,
+	base: `${url}`,
+	gql: `${url}graphql/`,
+	system: `${url}graphql/system/`,
+	assets: `${url}assets/`,
 }
 
 
 const colors = {
-    one_cc: 'yellow'
+	one_cc: 'yellow'
 }
 
 
 const another = {
-    token: 'access_token',
-    schemaRegexp: () => /SYSTEM/gm
+	token: 'access_token',
+	schemaRegexp: () => /SYSTEM/gm
 }
 
 
@@ -33,7 +33,7 @@ type IBaseEnv = {
 
 
 export const baseEnv: IBaseEnv = {
-    backendUrls,
-    colors,
-    another,
+	backendUrls,
+	colors,
+	another,
 }

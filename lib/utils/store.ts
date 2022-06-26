@@ -7,14 +7,14 @@ type ActionCreator<TPayload = any> =
     & { toString: () => string; namespace: () => string; }
 
 const createAction = <TPayload>(type: string) => Object.assign(
-    ($payload: TPayload) => {
-        // console.log(type, $payload);
-        return ({type, $payload});
-    },
-    {
-        toString: () => type,
-        namespace: () => type.split('/')[0]
-    }
+	($payload: TPayload) => {
+		// console.log(type, $payload);
+		return ({type, $payload});
+	},
+	{
+		toString: () => type,
+		namespace: () => type.split('/')[0]
+	}
 );
 
 
@@ -22,5 +22,5 @@ export const createActionNamespace = (namespace: string) => <TPayload = any>(typ
 
 
 const unfoldReducer: any = fp.pipe(
-    fp.mapValues(s => fp.isFunction(s) ? s : unfoldReducer(s)),
+	fp.mapValues(s => fp.isFunction(s) ? s : unfoldReducer(s)),
 );

@@ -8,10 +8,10 @@ interface ITranslate {
 }
 
 export const Translate: React.FC<ITranslate> = ({ name }) => {
-    const t = useTranslations(null);
-    return (
-        <>
-            {t(name)}
-        </>
-    );
+	const t = useTranslations(null);
+	return (
+		<>
+			{t(name)}
+		</>
+	);
 };

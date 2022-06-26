@@ -70,14 +70,14 @@ const withGQL = (nextConfig = {}) => {
 
 const pwaConfig = {
     pwa: {
-        dest: 'public',
+        dest: 'public'
     }
 }
 
 
 const composed = (phase) => {
     const plugins = [
-        withGQL,
+        withGQL
     ]
     if (phase === PHASE_DEVELOPMENT_SERVER)
         return composer(plugins)
@@ -94,11 +94,11 @@ const composed = (phase) => {
 const nextConfig = (phase) => ({
     reactStrictMode: true,
     images: {
-        domains: [],
+        domains: []
     },
     i18n: {
         locales: ["ru-RU", "en-US"],
-        defaultLocale: "ru-RU",
+        defaultLocale: "ru-RU"
     },
     ...composed(phase)
 })

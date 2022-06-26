@@ -1,7 +1,7 @@
-import {DocumentNode, OperationVariables, TypedDocumentNode} from "@apollo/client/core";
-import {QueryHookOptions, QueryResult} from "@apollo/client/react/types/types";
-import {useQuery} from "@apollo/client";
-import {useEffect} from "react";
+import {DocumentNode, OperationVariables, TypedDocumentNode} from '@apollo/client/core';
+import {QueryHookOptions, QueryResult} from '@apollo/client/react/types/types';
+import {useQuery} from '@apollo/client';
+import {useEffect} from 'react';
 
 // import {createSystemApolloClient} from "Lib/apollo";
 
@@ -18,15 +18,15 @@ interface SystemQueryHook {
 export const useSystemQuery: SystemQueryHook = (query, options) => {
 
 
-    const queryResult = useQuery(query, {
-        ...options,
-    })
+	const queryResult = useQuery(query, {
+		...options,
+	})
 
-    useEffect(() => {
+	useEffect(() => {
 
-        (async () => queryResult.refetch())()
+		(async () => queryResult.refetch())()
 
-    }, [queryResult, queryResult.refetch])
+	}, [queryResult, queryResult.refetch])
 
-    return queryResult
+	return queryResult
 }

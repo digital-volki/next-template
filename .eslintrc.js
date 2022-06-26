@@ -1,17 +1,11 @@
 const path = require('path');
 
-const a11yOff = Object.keys(require('eslint-plugin-jsx-a11y').rules)
-    .reduce((acc, rule) => { acc[`jsx-a11y/${rule}`] = 'off'; return acc }, {})
-
 
 const extensions = ['.js', '.ts', '.tsx', '.json', '.css', '.scss'];
 
 module.exports = {
-    extends: [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended",
-        "next/core-web-vitals"
+    'extends': [
+        'next/core-web-vitals'
     ],
     settings: {
         'import/extensions': extensions,
@@ -19,38 +13,33 @@ module.exports = {
             alias: {
                 map: [
                     ['Components', path.join(__dirname, 'comps')],
-                    ['Lib', path.join(__dirname, 'lib')],
-                    ['styles', path.join(__dirname, 'styles')],
-                    ['gql', path.join(__dirname, 'lib/apollo/schemas')],
                 ],
-                extensions,
+                extensions
             },
             node: {
-                extensions,
-            },
+                extensions
+            }
         },
     },
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
-        },
-        ecmaVersion: 12,
-        sourceType: 'module',
-    },
-    plugins: [
-        'react',
-        '@typescript-eslint',
-    ],
     rules: {
-        ...a11yOff,
-        camelcase: "off",
-        'react/require-default-props': 'off',
-        '@typescript-eslint/camelcase': ["off"],
-        indent: 'off',
-        'linebreak-style': 'off',
+        indent: ['error', 'tab'],
+        quotes: ['error', 'single'],
+        curly: ['error', 'multi-or-nest',],
+        'linebreak-style': ['error', 'unix'],
+        'nonblock-statement-body-position': ['error', 'below'],
+        'react/jsx-indent': ['error', 'tab'],
+        'react/jsx-indent-props': ['error', 'tab'],
+        'react/jsx-props-no-spreading': 'off',
+        'no-restricted-syntax': 'off',
+        'no-mixed-operators': 'off',
+        'no-console': 'off',
+        'no-shadow': 'off',
+        'no-nested-ternary': 'off',
+        'no-confusing-arrow': 'off',
+        'no-underscore-dangle': 'off',
+        'no-use-before-define': 'off',
         'max-len': [
-            'warn',
+            'error',
             {
                 code: 100,
                 tabWidth: 4,
@@ -75,14 +64,6 @@ module.exports = {
                 consistent: true,
             },
         ],
-        curly: [
-            'error',
-            'multi-or-nest',
-        ],
-        'nonblock-statement-body-position': [
-            'error',
-            'below',
-        ],
         'operator-linebreak': [
             'error',
             'after',
@@ -92,15 +73,6 @@ module.exports = {
                     ':': 'before',
                 },
             },
-        ],
-        'react/jsx-filename-extension': 'off',
-        'react/jsx-indent': [
-            'error',
-            4,
-        ],
-        'react/jsx-indent-props': [
-            'error',
-            4,
         ],
         'react/sort-comp': [
             'error',
@@ -114,46 +86,10 @@ module.exports = {
                 ],
             },
         ],
-        'react/jsx-props-no-spreading': 'off',
-        'react/prop-types': 'off',
-        'jsx-quotes': [
-            'error',
-            'prefer-single',
-        ],
-        'no-restricted-syntax': 'off',
-        'no-mixed-operators': 'off',
-        'no-console': 'off',
-        'no-shadow': 'off',
-        'no-nested-ternary': 'off',
-        'no-confusing-arrow': 'off',
-        'no-underscore-dangle': 'off',
-        'no-use-before-define': 'off',
         'no-multiple-empty-lines': [
-            'error',
-            {
-                max: 2,
-            },
-        ],
-        'implicit-arrow-linebreak': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-use-before-define': [
-            'error',
-        ],
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/indent': [
-            'error',
-            4,
-            {
-                SwitchCase: 1,
-            },
-        ],
-        '@typescript-eslint/ban-ts-comment': 'off',
-        'import/no-unresolved': [
             'warn',
             {
-                commonjs: true,
-                caseSensitive: true,
+                max: 2,
             },
         ],
         'import/newline-after-import': [
@@ -162,8 +98,6 @@ module.exports = {
                 count: 2,
             },
         ],
-        'import/extensions': 'off',
-        'import/prefer-default-export': 'off',
         'import/order': [
             'warn',
             {
@@ -182,5 +116,5 @@ module.exports = {
                 'newlines-between': 'always',
             },
         ],
-    },
+    }
 }
